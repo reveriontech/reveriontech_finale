@@ -1,13 +1,18 @@
 import React from 'react'
 import {Routes, Route} from 'react-router-dom'
 
-// Component then layout
+// Landing path
 import Navbarlayout from '../component/layout/Navbarlayout'
 
 // Pages 
 import Hero from '../pages/Hero'
 import Product from '../pages/Product'
 import Pricing from '../pages/Pricing'
+
+//Portal Path
+import Portal from '../pages/Portal'
+import Dashboard from '../pages/Dashboard'
+
 
 const Approutes = () => {
   return (
@@ -18,6 +23,11 @@ const Approutes = () => {
           <Route path="/" element={<Hero />} />
           <Route path="/product" element={<Product />} />
           <Route path="/pricing" element={<Pricing />} />
+        </Route>
+
+        {/* Private routes */}
+        <Route element={<Portal />}>
+          <Route path="/portal" element={<Dashboard />} />
         </Route>
       </Routes>
 

@@ -14,7 +14,7 @@ const Navbarlayout = () => {
                 imageLogoSrc= "/images/ReverionTechLogo-dark.png"
                 navItems={customNavItems}
                 showLogin={true}
-                loginPath="/login"
+                loginPath="/portal"
                 primaryColor="#212529"
                 hoverColor="#6c757d"
             />

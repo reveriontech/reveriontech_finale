@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FaSignInAlt, FaBars, FaTimes } from 'react-icons/fa';
+import {FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 
 // Ui component
@@ -17,9 +17,9 @@ const Navbar = ({
     { name: 'Pricing', to: '/pricing' },
   ],
   showLogin = true,
-  loginPath = '/login',
   primaryColor = '#212529',
   hoverColor = '#c9184a',
+  loginPath = '/portal',
   className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +29,7 @@ const Navbar = ({
   const isActive = (path) => location.pathname === path;
 
   // Base navbar classes
-  const baseClasses = 'w-full z-[9999] text-white rounded-xs fixed top-0 left-0 right-0 shadow-lg';
+  const baseClasses = 'w-full z-[9999] text-white fixed top-0 left-0 right-0 shadow-lg';
   
   // Mobile menu classes
   const mobileMenuClasses = `${isOpen ? 'block' : 'hidden'} md:hidden transition-all duration-300 ease-in-out`;
@@ -56,8 +56,12 @@ const Navbar = ({
       onClick={() => {}} 
       className="border-white text-white hover:bg-white/10"
     >
-      <FaSignInAlt className="mr-2" />
-      Login
+      <img 
+        src="/images/icp-logo.png" 
+        alt="ICP Logo" 
+        className="h-5 w-5 mr-2"
+      />
+      Login to ICP
     </Button>
   );
 
@@ -152,8 +156,12 @@ const Navbar = ({
                   fullWidth
                   className="border-white text-white hover:bg-white/10"
                 >
-                  <FaSignInAlt className="mr-2" />
-                  Login
+                  <img 
+                    src="/images/icp-logo.png" 
+                    alt="ICP Logo" 
+                    className="h-5 w-5 mr-2"
+                  />
+                  Login to ICP
                 </Button>
               </Link>
             </div>
