@@ -19,6 +19,7 @@ const Navbar = ({
   showLogin = true,
   primaryColor = '#212529',
   hoverColor = '#c9184a',
+  // Pre Temporary
   loginPath = '/portal',
   className = '',
 }) => {
@@ -51,16 +52,11 @@ const Navbar = ({
 
   const LoginButton = () => (
     <Button 
-      variant="outline" 
+      variant="success" 
       size="md" 
       onClick={() => {}} 
       className="border-white text-white hover:bg-white/10"
     >
-      <img 
-        src="/images/icp-logo.png" 
-        alt="ICP Logo" 
-        className="h-5 w-5 mr-2"
-      />
       Login to ICP
     </Button>
   );
@@ -151,16 +147,11 @@ const Navbar = ({
             <div className="mt-4 px-3">
               <Link to={loginPath} className="w-full block" onClick={() => setIsOpen(false)}>
                 <Button 
-                  variant="outline" 
+                  variant="success" 
                   size="md" 
                   fullWidth
                   className="border-white text-white hover:bg-white/10"
                 >
-                  <img 
-                    src="/images/icp-logo.png" 
-                    alt="ICP Logo" 
-                    className="h-5 w-5 mr-2"
-                  />
                   Login to ICP
                 </Button>
               </Link>

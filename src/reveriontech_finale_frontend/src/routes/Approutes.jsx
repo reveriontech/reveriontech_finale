@@ -26,7 +26,7 @@ const Approutes = () => {
         </Route>
 
         {/* Private routes */}
-        <Route element={<Portal />}>
+        <Route path="/" element={<Portal />}>
           <Route path="/portal" element={<Dashboard />} />
         </Route>
       </Routes>
