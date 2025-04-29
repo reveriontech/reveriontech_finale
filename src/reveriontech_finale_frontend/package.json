@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create reveriontech_finale_backend && dfx generate reveriontech_finale_backend && dfx deploy",
+    "setup": "npm i && dfx canister create reverion_engine && dfx generate reverion_engine && dfx deploy",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build",
