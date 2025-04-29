@@ -7,10 +7,11 @@ const Sidebar = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
     if (onToggle) {
-        onToggle(!isOpen);
-      }
+      onToggle(newIsOpen);
+    }
   };
 
   // Run onToggle on initial render to sync parent component
@@ -18,7 +19,7 @@ const Sidebar = ({ onToggle }) => {
     if (onToggle) {
       onToggle(isOpen);
     }
-  }, [isOpen, onToggle]);
+  }, [onToggle]);
 
   const menuItems = [
     { title: 'Home', path: '/portal', icon: <AiOutlineHome size={20} /> },
