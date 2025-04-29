@@ -1,31 +1,15 @@
-import { useState } from 'react';
-import { reveriontech_finale_backend } from 'declarations/reveriontech_finale_backend';
+import React from 'react'
+import Approutes from './routes/Approutes'
+import { BrowserRouter as Router } from 'react-router-dom'
 
-function App() {
-  const [greeting, setGreeting] = useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    reveriontech_finale_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
-
+const App = () => {
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
-  );
+    <>
+      <Router>
+        <Approutes />
+      </Router>
+    </>
+  )
 }
 
-export default App;
+export default App
