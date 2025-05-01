@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AiOutlineHome, AiOutlineInbox, AiOutlineDashboard, AiOutlineProject } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlineInbox, AiOutlineDashboard, AiOutlineProject, AiOutlineCheckSquare} from 'react-icons/ai';
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
 
 const Sidebar = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
 
+  // Toggle sidebar open/close state
   const toggleSidebar = () => {
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
@@ -23,10 +24,11 @@ const Sidebar = ({ onToggle }) => {
 
   const menuItems = [
     { title: 'Home', path: '/portal', icon: <AiOutlineHome size={20} /> },
-    { title: 'Inbox', path: '/portal/inbox', icon: <AiOutlineInbox size={20} /> },
+    { title: 'Inbox', path: '/inbox', icon: <AiOutlineInbox size={20} /> },
     { divider: true },
-    { title: 'Dashboard', path: '/portal/dashboard', icon: <AiOutlineDashboard size={20} /> },
-    { title: 'Projects', path: '/portal/projects', icon: <AiOutlineProject size={20} /> },
+    { title: 'Dashboard', path: '/dashboard', icon: <AiOutlineDashboard size={20} /> },
+    { title: 'Tasks', path: '/taskspage', icon: <AiOutlineCheckSquare size={20} /> },
+    { title: 'Projects', path: '/projects', icon: <AiOutlineProject size={20} /> },
   ];
 
   return (
