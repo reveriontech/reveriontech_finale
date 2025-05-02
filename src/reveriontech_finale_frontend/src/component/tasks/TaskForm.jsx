@@ -4,6 +4,7 @@ import { closeTaskForm, selectCurrentTaskId, selectTaskFormOpen } from '../../st
 import { useTasks } from '../../hooks/useTasks';
 import Button from '../ui/Button';
 import { AiOutlineClose } from 'react-icons/ai';
+import Dropdown from '../ui/Dropdown';
 
 const priorityOptions = [
   { value: 'low', label: 'Low' },
@@ -26,10 +27,9 @@ const initialTaskData = {
   assignee: ''
 };
 
-const TaskForm = () => {
+const TaskForm = ({ onSubmit, onClose }) => {
   const dispatch = useDispatch();
-  const { tasks, createNewTask, updateTask } = useTasks();
-  const isOpen = useSelector(selectTaskFormOpen);
+  const { tasks } = useTasks();
   const currentTaskId = useSelector(selectCurrentTaskId);
   const [formData, setFormData] = useState(initialTaskData);
   const [errors, setErrors] = useState({});
@@ -89,43 +89,15 @@ const TaskForm = () => {
       // Add any additional processing here
     };
     
-    if (isEditMode) {
-      updateTask(currentTaskId, taskData);
-    } else {
-      createNewTask(taskData);
-    }
-    
-    dispatch(closeTaskForm());
+    onSubmit(taskData);
+    onClose();
+    setFormData(initialTaskData);
   };
   
-  const handleClose = () => {
-    dispatch(closeTaskForm());
-    setErrors({});
-  };
-  
-  if (!isOpen) return null;
-  
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-black bg-opacity-50">
-      <div className="relative w-full max-w-md p-4">
-        <div className="relative bg-white rounded-lg shadow-xl">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">
-              {isEditMode ? 'Edit Task' : 'Create New Task'}
-            </h3>
-            <button
-              type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-500 rounded-lg p-1.5"
-              onClick={handleClose}
-            >
-              <AiOutlineClose className="w-5 h-5" />
-            </button>
-          </div>
-          
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6">
-            <div className="mb-4">
+    return (
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            {/* Title Section */}
+            <div>
               <label className="block mb-1 text-sm font-medium text-gray-700">Title</label>
               <input
                 type="text"
@@ -138,8 +110,9 @@ const TaskForm = () => {
               />
               {errors.title && <p className="mt-1 text-xs text-red-500">{errors.title}</p>}
             </div>
-            
-            <div className="mb-4">
+          
+            {/* Description Section */}
+            <div>
               <label className="block mb-1 text-sm font-medium text-gray-700">Description</label>
               <textarea
                 name="description"
@@ -147,10 +120,12 @@ const TaskForm = () => {
                 onChange={handleChange}
                 rows="3"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              ></textarea>
+              />
             </div>
-            
-            <div className="grid grid-cols-2 gap-4 mb-4">
+          
+            {/* Status and Priority Section */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Status */}
               <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Status</label>
                 <select
@@ -167,6 +142,7 @@ const TaskForm = () => {
                 </select>
               </div>
               
+              {/* Priority */}
               <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Priority</label>
                 <select
@@ -183,8 +159,10 @@ const TaskForm = () => {
                 </select>
               </div>
             </div>
-            
-            <div className="grid grid-cols-2 gap-4 mb-4">
+          
+            {/* Due Date and Assignee Section */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Due Date */}
               <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Due Date</label>
                 <input
@@ -196,6 +174,7 @@ const TaskForm = () => {
                 />
               </div>
               
+              {/* Assignee */}
               <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700">Assignee</label>
                 <input
@@ -208,11 +187,12 @@ const TaskForm = () => {
                 />
               </div>
             </div>
-            
-            <div className="flex justify-end pt-4 mt-4 space-x-3 border-t border-gray-200">
+          
+            {/* Action Buttons */}
+            <div className="flex justify-end pt-4 space-x-3 border-t border-gray-200">
               <Button 
                 variant="outline" 
-                onClick={handleClose}
+                onClick={onClose}
               >
                 Cancel
               </Button>
@@ -224,9 +204,6 @@ const TaskForm = () => {
               </Button>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
   );
 };
 
