@@ -16,10 +16,12 @@
     "src/reveriontech_finale_frontend"
   ],
   "dependencies": {
+    "@dfinity/agent": "^2.4.1",
     "@dfinity/auth-client": "^2.4.1",
     "@dfinity/identity": "^2.4.1",
     "@dfinity/principal": "^2.4.1",
     "@material-tailwind/react": "^2.1.10",
+    "@nfid/embed": "^0.10.3",
     "@reduxjs/toolkit": "^2.7.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.9.0",
