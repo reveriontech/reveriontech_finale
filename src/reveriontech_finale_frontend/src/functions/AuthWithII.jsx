@@ -1,108 +1,64 @@
-import React, { useState, useEffect } from 'react'
-import { authWithNFID, getNFIDIdentity, signoutII } from '../services/authWithII'
-import { Session } from '../providers/SessionProvider'
+import React, { useEffect, useState } from 'react'
+import { NFID } from "@nfid/embed"
 import { Principal } from '@dfinity/principal'
 
-function AuthWithIIFunctions() {
-    const [loading, setLoading] = useState(true)
-    const [userIdentity, setUserIdentity] = useState(null)
-    const [authenticatedActor, setAuthenticatedActor] = useState(null)
-    const [principalId, setPrincipalId] = useState(null)
-    const [isSigningInAuth, setIsSigningInAuth] = useState(false)
-    const [isSigningUpAuth, setIsSigningUpAuth] = useState(false)
-    const [userData, setUserData] = useState(null)
-    const [userDetails, setUserDetails] = useState(null)
-    const [signInAuthError, setSignInAuthError] = useState(null)
-    const [signUpAuthError, setSignUpAuthError] = useState(null)
+function AuthWithII() {
+    const [nfid, setNfid] = useState(null)
+    const [delegation, setDelegation] = useState(null)
+    const [error, setError] = useState(null)
 
-    const handleSignInAuthWithII = async () => {
-        setIsSigningInAuth(true)
-        setSignInAuthError(null)
-        
+    useEffect(() => {
+        const initNFID = async () => {
         try {
-            const { identity: userIdentity, authenticatedActor } = await authWithII()
-            const principalId = userIdentity.getPrincipal()
-            
-            const existingUser = await authenticatedActor.getUser(principalId)
-            
-            if (existingUser.ok) {
-                const userData = existingUser.ok
-                setUserIdentity(userIdentity)
-                setAuthenticatedActor(authenticatedActor)
-                setPrincipalId(principalId)
-                setUserData(userData)
-                
-                window.location.reload()
-                
-            } else {
-                await signoutII()
-                setSignInAuthError('Authentication has been denied. Please sign up first.')
-            }
+            const nfIDInstance = await NFID.init({
+            application: {
+                name: "NFID Login",
+                logo: "https://dev.nfid.one/static/media/id.300eb72f3335b50f5653a7d6ad5467b3.svg"
+            },
+            idleOptions: {
+                idleTimeout: 600000,
+                captureScroll: true,
+                scrollDebounce: 100,
+            },
+            });
+            setNfid(nfIDInstance);
         } catch (error) {
-            setSignInAuthError('Authentication error has occurred. Please try again later.')
-        } finally {
-            setTimeout(() => {
-                setIsSigningInAuth(false)
-            }, 120)
+            setError("Failed to initialize NFID.")
         }
-    }
-    
-    const handleSignUpAuthWithII = async () => {
-        setIsSigningUpAuth(true)
-        setSignUpAuthError(null)
+        };
+
+        initNFID()
+    }, [])
+
+
+    const handleNFIDCall = async () => {
+
+        const canisterArray = process.env.CANISTER_ID_NFID_LOGIN_BACKEND
         
-        try {
-            const { identity: userIdentity, authenticatedActor } = await authWithII()
-            const principalId = userIdentity.getPrincipal()
-            
-            const existingUser = await authenticatedActor.getUser(principalId)
-            
-            if (existingUser.ok) {
-                await signoutII()
-                setSignUpAuthError('Authentication has been confirmed. Please sign in now.')
-                
-            } else {
-                const result = await authenticatedActor.createUser(principalId)
-                
-                if (result.ok) {
-                    const userData = result.ok
-                    setUserIdentity(userIdentity)
-                    setAuthenticatedActor(authenticatedActor)
-                    setPrincipalId(principalId)
-                    setUserData(userData)
-                    
-                    window.location.reload()
-                } else {
-                    setSignUpAuthError(result.err)
-                }
+        if (nfid) {
+            try {
+                const identity = nfid.getIdentity()
+                console.log(identity)
+
+                const delegationResult = await nfid.getDelegation({ targets: canisterArray })
+                const theUserPrincipal = Principal.from(delegationResult.getPrincipal()).toText()
+                console.log(theUserPrincipal)
+                const isLogin = await nfid.getDelegationType()
+                console.log(isLogin,'Delegation type')
+                setDelegation(theUserPrincipal)
+            } catch (error) {
+                setError("Failed to get NFID delegation.")
             }
-        } catch (error) {
-            setSignUpAuthError('Authentication error has occurred. Please try again later.')
-        } finally {
-            setTimeout(() => {
-                setIsSigningUpAuth(false)
-            }, 120)
+        } else {
+        setError("NFID is not initialized.")
         }
-    }
-    
+    };
     return {
-        loading,
-        setLoading,
-        userIdentity,
-        setUserIdentity,
-        authenticatedActor,
-        principalId,
-        userData,
-        userDetails,
-        signInAuthError,
-        signUpAuthError,
-        handleSignInAuthWithII,
-        isSigningInAuth,
-        setIsSigningInAuth,
-        handleSignUpAuthWithII,
-        isSigningUpAuth,
-        setIsSigningUpAuth
+        nfid,
+        delegation,
+        error,
+        handleNFIDCall
     }
 }
 
-export default AuthWithIIFunctions
+export default AuthWithII

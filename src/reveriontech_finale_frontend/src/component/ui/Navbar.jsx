@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
+import AuthWithII from '../../functions/AuthWithII';
 
 // Ui component
 import Button from './Button';
@@ -50,16 +51,25 @@ const Navbar = ({
     return title;
   };
 
+  const {
+    nfid,
+        delegation,
+        error,
+        handleNFIDCall
+  } = AuthWithII()
+
   const LoginButton = () => (
     <Button 
       variant="success" 
       size="md" 
-      onClick={() => {}} 
+      onClick={handleNFIDCall}
       className="border-white text-white hover:bg-white/10"
     >
       Login to ICP
     </Button>
   );
+
+
 
   return (
     <nav 
@@ -145,7 +155,7 @@ const Navbar = ({
            {/* MOBILE - Login button */}
            {showLogin && (
             <div className="mt-4 px-3">
-              <Link to={loginPath} className="w-full block" onClick={() => setIsOpen(false)}>
+              <div className="w-full block" onClick={handleNFIDCall}>
                 <Button 
                   variant="success" 
                   size="md" 
@@ -154,7 +164,7 @@ const Navbar = ({
                 >
                   Login to ICP
                 </Button>
-              </Link>
+              </div>
             </div>
           )}
         </div>
