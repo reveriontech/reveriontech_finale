@@ -116,9 +116,9 @@ const Navbar = ({
             {/* DESKTOP - Login button area */}
             {showLogin && (
               <div className="hidden md:block ml-6">
-                <Link to={loginPath}>
+                <div>
                   <LoginButton />
-                </Link>
+                </div>
               </div>
             )}
             
