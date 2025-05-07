@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { NFID } from "@nfid/embed"
 import { Principal } from '@dfinity/principal'
+import { AuthClient } from '@dfinity/auth-client'
+import { createActor, canisterId } from 'declarations/reverion_engine'
+import { HttpAgent } from '@dfinity/agent'
 
 function AuthWithII() {
     const [nfid, setNfid] = useState(null)
@@ -12,7 +15,7 @@ function AuthWithII() {
         try {
             const nfIDInstance = await NFID.init({
             application: {
-                name: "NFID Login",
+                name: "Reverion Technologies",
                 logo: "https://dev.nfid.one/static/media/id.300eb72f3335b50f5653a7d6ad5467b3.svg"
             },
             idleOptions: {
@@ -30,10 +33,9 @@ function AuthWithII() {
         initNFID()
     }, [])
 
-
     const handleNFIDCall = async () => {
 
-        const canisterArray = process.env.CANISTER_ID_NFID_LOGIN_BACKEND
+        const canisterArray = process.env.CANISTER_ID_REVERION_ENGINE
         
         if (nfid) {
             try {
@@ -52,7 +54,8 @@ function AuthWithII() {
         } else {
         setError("NFID is not initialized.")
         }
-    };
+    }
+    
     return {
         nfid,
         delegation,
