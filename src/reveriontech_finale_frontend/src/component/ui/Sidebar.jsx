@@ -41,7 +41,6 @@ const Sidebar = ({ onToggle }) => {
     { title: 'Inbox', path: '/inbox', icon: <AiOutlineInbox size={20} /> },
     { divider: true },
     { title: 'Dashboard', path: '/dashboard', icon: <AiOutlineDashboard size={20} /> },
-    // { title: 'Tasks', path: '/taskspage', icon: <AiOutlineCheckSquare size={20} /> },
     { title: 'Projects', path: '/projects', icon: <AiOutlineProject size={20} /> },
   ];
 
@@ -109,7 +108,7 @@ const Sidebar = ({ onToggle }) => {
               )}
             </div>
 
-             {/* Created Tasks List - Shown outside dropdown when collapsed */}
+             {/* Task list */}
             {isOpen && !isTasksOpen && tasks.length > 0 && (
               <div className="pl-10 mt-1 space-y-1">
                 {tasks.map((task, index) => (
