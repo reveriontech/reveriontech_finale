@@ -11,6 +11,13 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        includePaths: ['./src/styles'],
+      }
+    }
+  },
   optimizeDeps: {
     esbuildOptions: {
       define: {
@@ -25,12 +32,23 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    hmr: {
+      overlay: true,
+      enabled: true,
+    },
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
   },
   plugins: [
     tailwindcss(),
-    react(),
-    environment("all", { prefix: "CANISTER_" }),
-    environment("all", { prefix: "DFX_" }),
+    react({
+      // Add fast refresh for React components
+      fastRefresh: true,
+    }),
+    environment("all", { prefix: "CANISTER" }),
+    environment("all", { prefix: "DFX" }),
   ],
   resolve: {
     alias: [

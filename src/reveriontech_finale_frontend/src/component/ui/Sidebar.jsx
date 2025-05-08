@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { AiOutlineHome, AiOutlineInbox, AiOutlineDashboard, AiOutlineProject, AiOutlineCheckSquare} from 'react-icons/ai';
-import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
+import { HiOutlineChevronLeft, HiOutlineChevronRight, HiOutlineChevronUp, HiOutlineChevronDown  } from 'react-icons/hi';
+import Dropdown from './Dropdown';
+
 
 const Sidebar = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [isTasksOpen, setIsTasksOpen] = useState(false);
+  const [tasks, setTasks] = useState([]);
 
   // Toggle sidebar open/close state
   const toggleSidebar = () => {
@@ -22,12 +27,21 @@ const Sidebar = ({ onToggle }) => {
     }
   }, [onToggle]);
 
+  const toggleTasksDropdown = () => {
+    setIsTasksOpen(!isTasksOpen);
+  };
+
+  const handleCreateTask = (newTask) => {
+    setTasks([...tasks, newTask]);
+  };
+
+
   const menuItems = [
     { title: 'Home', path: '/portal', icon: <AiOutlineHome size={20} /> },
     { title: 'Inbox', path: '/inbox', icon: <AiOutlineInbox size={20} /> },
     { divider: true },
     { title: 'Dashboard', path: '/dashboard', icon: <AiOutlineDashboard size={20} /> },
-    { title: 'Tasks', path: '/taskspage', icon: <AiOutlineCheckSquare size={20} /> },
+    // { title: 'Tasks', path: '/taskspage', icon: <AiOutlineCheckSquare size={20} /> },
     { title: 'Projects', path: '/projects', icon: <AiOutlineProject size={20} /> },
   ];
 
@@ -57,7 +71,7 @@ const Sidebar = ({ onToggle }) => {
               <Link
                 key={index}
                 to={item.path}
-                className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
+                className="flex items-center text-sm gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
                 title={!isOpen ? item.title : ""}
               >
                 <span>{item.icon}</span>
@@ -65,6 +79,50 @@ const Sidebar = ({ onToggle }) => {
               </Link>
             )
           ))}
+
+         {/* Tasks Item with Dropdown */}
+          <div className="relative">
+              <button
+                onClick={toggleTasksDropdown}
+                className="w-full flex items-center justify-between text-sm gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
+                title={!isOpen ? "Tasks" : ""}
+              >
+                <div className="flex items-center gap-3">
+                  <span><AiOutlineCheckSquare size={20} /></span>
+                  {isOpen && <span>Tasks</span>}
+                </div>
+                {isOpen && (
+                  <span>
+                    {isTasksOpen ? <HiOutlineChevronUp size={16} /> : <HiOutlineChevronDown size={16} />}
+                  </span>
+                )}
+              </button>
+              
+              {/* Tasks Dropdown Component */}
+              {isOpen && (
+                <Dropdown 
+                  isOpen={isTasksOpen}
+                  items={tasks}
+                  onCreateItem={handleCreateTask}
+                  linkPath="/taskspage"
+                />
+              )}
+            </div>
+
+             {/* Created Tasks List - Shown outside dropdown when collapsed */}
+            {isOpen && !isTasksOpen && tasks.length > 0 && (
+              <div className="pl-10 mt-1 space-y-1">
+                {tasks.map((task, index) => (
+                  <Link
+                    key={index}
+                    to="/taskspage"
+                    className="flex items-center text-sm py-2 text-gray-300 hover:text-gray-100"
+                  >
+                    <span>{task.title}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
         </nav>
       </div>
 
@@ -85,6 +143,10 @@ const Sidebar = ({ onToggle }) => {
       </div>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  onToggle: PropTypes.func
 };
 
 export default Sidebar;

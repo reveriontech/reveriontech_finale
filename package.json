@@ -34,6 +34,8 @@
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
-    "@types/babel__core": "^7.20.5"
+    "@types/babel__core": "^7.20.5",
+    "@vitejs/plugin-react": "^4.4.1",
+    "sass": "^1.87.0"
   }
 }
