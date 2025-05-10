@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import AuthWithII from '../../functions/AuthWithII';
+import AuthWithNFIDFunctions from '../../functions/AuthWithNFIDFunctions';
 
 // Ui component
 import Button from './Button';
@@ -52,20 +52,27 @@ const Navbar = ({
   };
 
   const {
-    nfid,
-        delegation,
-        error,
-        handleNFIDCall
-  } = AuthWithII()
+    nfidUserIdentity,
+    setNFIDUserIdentity,
+    nfidAuthenticatedActor,
+    nfidPrincipalId,
+    nfidUserData,
+    nfidSignInAuthError,
+    handleSignInAuthWithNFID,
+    nfidIsSigningInAuth,
+    setNFIDIsSigningInAuth
+  } = AuthWithNFIDFunctions()
 
   const LoginButton = () => (
     <Button 
       variant="success" 
       size="md" 
-      onClick={handleNFIDCall}
+      onClick={handleSignInAuthWithNFID}
       className="border-white text-white hover:bg-white/10"
+      disabled={nfidIsSigningInAuth}
     >
-      Login to ICP
+      {nfidIsSigningInAuth ? ('Authenticating') : (
+        <> Sign In with NFID</>)}
     </Button>
   );
 
@@ -155,14 +162,16 @@ const Navbar = ({
            {/* MOBILE - Login button */}
            {showLogin && (
             <div className="mt-4 px-3">
-              <div className="w-full block" onClick={handleNFIDCall}>
+              <div className="w-full block" onClick={handleSignInAuthWithNFID}>
                 <Button 
                   variant="success" 
                   size="md" 
                   fullWidth
                   className="border-white text-white hover:bg-white/10"
+                  disabled={nfidIsSigningInAuth}
                 >
-                  Login to ICP
+                   {nfidIsSigningInAuth ? ('Authenticating') : (
+                            <> Sign In with NFID</>)}
                 </Button>
               </div>
             </div>
