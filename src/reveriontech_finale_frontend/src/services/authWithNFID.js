@@ -8,7 +8,7 @@ const appName = "Reverion Technologies Co."
 
 const identityProvider = network === 'ic'
     ? `https://nfid.one/authenticate/?applicationName=${encodeURIComponent(appName)}`
-    : `https://nfid.one/authenticate/?applicationName=${encodeURIComponent(appName)}`
+    : `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943/?${encodeURIComponent(appName)}`
 
 const host = network === 'ic' ? "https://icp0.io" : "http://localhost:4943"
 

@@ -7,13 +7,20 @@ module {
 
     public type UserLevel = {
         #L1;
+        #L2;
+        #L3;
+        #L4;
+        #L5;
+        #L6;
+        #L7;
+        #L8;
+        #L9;
         #L10;
-        #L100;
     };
 
     public type User = {
         principalId: Principal;
-        profile: Blob;
+        profile: Text;
         username: Text;
         firstName: Text;
         middleName: Text;
