@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { AiOutlineHome, AiOutlineInbox, AiOutlineDashboard, AiOutlineProject, AiOutlineCheckSquare} from 'react-icons/ai';
 import { HiOutlineChevronLeft, HiOutlineChevronRight, HiOutlineChevronUp, HiOutlineChevronDown  } from 'react-icons/hi';
 import Dropdown from './Dropdown';
-
+import { Session } from '../../routes/ProtectedRoutes'
+import { signoutII } from '../../services/authWithNFID'
 
 const Sidebar = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -35,6 +36,11 @@ const Sidebar = ({ onToggle }) => {
     setTasks([...tasks, newTask]);
   };
 
+  const {
+		userIdentity,
+        principalId,
+        userData
+	} = Session()
 
   const menuItems = [
     { title: 'Home', path: '/portal', icon: <AiOutlineHome size={20} /> },
@@ -45,6 +51,7 @@ const Sidebar = ({ onToggle }) => {
   ];
 
   return (
+    
     <div 
       className={`h-screen bg-[#212529] text-white fixed left-0 top-0 transition-all duration-300 z-10 flex flex-col ${
         isOpen ? 'w-64' : 'w-20'
@@ -130,8 +137,8 @@ const Sidebar = ({ onToggle }) => {
           <div className="flex items-center gap-3 px-4 py-2">
             <div className="w-8 h-8 rounded-full bg-gray-600"></div>
             <div>
-              <p className="text-sm font-medium">User Name</p>
-              <p className="text-xs text-gray-400">user@example.com</p>
+              <p className="text-sm font-medium">{userData?.username?.split('@')[0] || "Null"}</p>
+              <p className="text-xs text-gray-400">{userData?.username?.split('@')[0] || ""}</p>
             </div>
           </div>
         ) : (

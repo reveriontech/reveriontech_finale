@@ -1,6 +1,10 @@
 import React from 'react'
 import {Routes, Route} from 'react-router-dom'
 
+import { ProtectedRoutes } from './ProtectedRoutes'
+import AccessRoutes from './AccessRoutes'
+import PrivateRoutes from './PrivateRoutes'
+
 // Landing path
 import Navbarlayout from '../component/layout/Navbarlayout'
 
@@ -19,28 +23,34 @@ import TasksPage from '../pages/TasksPage'
 
 
 const Approutes = () => {
-  return (
-      <Routes >
-        
-        {/* Public routes */}
-         <Route element={<Navbarlayout />}>
-          <Route path="/" element={<Hero />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/pricing" element={<Pricing />} />
-        </Route>
+    return (
 
-        {/* Private routes */}
-        <Route path="/" element={<Portal />}>
-          <Route path="/portal" element={<Home />} />
-          <Route path="/inbox" element={<Inbox />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/taskspage" element={<TasksPage />} />\
-        </Route>
+        <ProtectedRoutes>
 
-      </Routes>
+            <Routes >
+                
+                {/* Public routes */}
+                <Route element={<Navbarlayout />}>
+                    <Route path="/" element={<AccessRoutes><Hero /></AccessRoutes>} />
+                    <Route path="/home" element={<AccessRoutes><Hero /></AccessRoutes>} />
+                    <Route path="/product" element={<AccessRoutes><Product /></AccessRoutes>} />
+                    <Route path="/pricing" element={<AccessRoutes><Pricing /></AccessRoutes>} />
+                </Route>
 
-  )
+                {/* Private routes */}
+                <Route element={<Portal />}>
+                    <Route path="/portal" element={<PrivateRoutes><Home /></PrivateRoutes>} />
+                    <Route path="/inbox" element={<PrivateRoutes><Inbox /></PrivateRoutes>} />
+                    <Route path="/dashboard" element={<PrivateRoutes><Dashboard /></PrivateRoutes>} />
+                    <Route path="/projects" element={<PrivateRoutes><Projects /></PrivateRoutes>} />
+                    <Route path="/taskspage" element={<PrivateRoutes><TasksPage /></PrivateRoutes>} />
+                </Route>
+
+            </Routes>
+
+        </ProtectedRoutes>
+
+    )
 }
 
 export default Approutes

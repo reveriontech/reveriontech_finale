@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { authWithNFID } from '../services/authWithNFID'
+import { authWithNFID, signoutII } from '../services/authWithNFID'
 
 function AuthWithNFIDFunctions() {
     const [nfidUserIdentity, setNFIDUserIdentity] = useState(null)
@@ -51,6 +51,35 @@ function AuthWithNFIDFunctions() {
             }, 120)
         }
     }
+
+    const handleSignOut = async () => {
+
+        setIsSigningOut(true)
+
+        try {
+
+            const signout = await signoutII()
+
+            if (signout) {
+                if (location.pathname !== '/' && location.pathname !== '/home' && location.pathname !== '/product' && location.pathname !== '/pricing') {
+                    await signoutII()
+                    navigate('/home')
+                }
+                return
+            } else {
+                window.location.reload()
+            }
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            window.location.reload()
+            setTimeout(() => 
+                setIsSigningOut(false), 800
+            )
+        }
+
+    }
     
     return {
         nfidUserIdentity,
@@ -61,7 +90,8 @@ function AuthWithNFIDFunctions() {
         nfidSignInAuthError,
         handleSignInAuthWithNFID,
         nfidIsSigningInAuth,
-        setNFIDIsSigningInAuth
+        setNFIDIsSigningInAuth,
+        handleSignOut
     }
 }
 
