@@ -86,7 +86,9 @@ export const ProtectedRoutes = ({ children }) => {
 
                         userData.userType = userType
                         userData.userLevel = userLevel
+                        const username = userData.username
                         console.log(userData)
+                        console.log(username)
                         
                         if (userType === 'User' && userLevel === 'L1') {
                             if (privateRoutes.includes(location.pathname)) {

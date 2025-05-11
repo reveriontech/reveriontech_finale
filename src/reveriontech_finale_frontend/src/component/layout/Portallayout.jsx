@@ -4,6 +4,7 @@ import Sidebar from '../ui/Sidebar';
 import { useState } from 'react';
 
 const Portallayout = () => {
+
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const handleSidebarToggle = (isOpen) => {

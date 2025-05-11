@@ -4,6 +4,7 @@ import React from 'react'
 import Portallayout from '../component/layout/Portallayout'
 
 const Portal = () => {
+  
   return (
     <div>
         <Portallayout />

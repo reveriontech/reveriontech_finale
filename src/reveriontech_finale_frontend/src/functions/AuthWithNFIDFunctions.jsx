@@ -8,6 +8,7 @@ function AuthWithNFIDFunctions() {
     const [nfidIsSigningInAuth, setNFIDIsSigningInAuth] = useState(false)
     const [nfidUserData, setNFIDUserData] = useState(null)
     const [nfidSignInAuthError, setNFIDSignInAuthError] = useState(null)
+    const [isSigningOut, setIsSigningOut] = useState(false)
     
     const handleSignInAuthWithNFID = async () => {
         setNFIDIsSigningInAuth(true)

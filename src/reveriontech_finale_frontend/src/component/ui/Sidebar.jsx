@@ -5,7 +5,7 @@ import { AiOutlineHome, AiOutlineInbox, AiOutlineDashboard, AiOutlineProject, Ai
 import { HiOutlineChevronLeft, HiOutlineChevronRight, HiOutlineChevronUp, HiOutlineChevronDown  } from 'react-icons/hi';
 import Dropdown from './Dropdown';
 import { Session } from '../../routes/ProtectedRoutes'
-import { signoutII } from '../../services/authWithNFID'
+import AuthWithNFIDFunctions from '../../functions/AuthWithNFIDFunctions'
 
 const Sidebar = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -36,11 +36,16 @@ const Sidebar = ({ onToggle }) => {
     setTasks([...tasks, newTask]);
   };
 
-  const {
+    const {
 		userIdentity,
         principalId,
         userData
 	} = Session()
+
+    const {
+        isSigningOut,
+        handleSignOut
+    } = AuthWithNFIDFunctions()
 
   const menuItems = [
     { title: 'Home', path: '/portal', icon: <AiOutlineHome size={20} /> },
@@ -51,103 +56,106 @@ const Sidebar = ({ onToggle }) => {
   ];
 
   return (
-    
-    <div 
-      className={`h-screen bg-[#212529] text-white fixed left-0 top-0 transition-all duration-300 z-10 flex flex-col ${
-        isOpen ? 'w-64' : 'w-20'
-      }`}
-    >
-      <div className="flex items-center justify-between p-4 border-b border-gray-700">
-        {isOpen && <h2 className="text-xl font-bold">ReverionTech</h2>}
-        <button 
-          onClick={toggleSidebar}
-          className={`p-2 rounded-lg hover:bg-gray-700 transition-colors ${!isOpen && 'mx-auto'}`}
-          aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+    <>
+        <div 
+        className={`h-screen bg-[#212529] text-white fixed left-0 top-0 transition-all duration-300 z-10 flex flex-col ${
+            isOpen ? 'w-64' : 'w-20'
+        }`}
         >
-          {isOpen ? <HiOutlineChevronLeft size={20} /> : <HiOutlineChevronRight size={20} />}
-        </button>
-      </div>
+        <div className="flex items-center justify-between p-4 border-b border-gray-700">
+            {isOpen && <h2 className="text-xl font-bold">ReverionTech</h2>}
+            <button 
+            onClick={toggleSidebar}
+            className={`p-2 rounded-lg hover:bg-gray-700 transition-colors ${!isOpen && 'mx-auto'}`}
+            aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+            >
+            {isOpen ? <HiOutlineChevronLeft size={20} /> : <HiOutlineChevronRight size={20} />}
+            </button>
+        </div>
 
-      <div className="p-4 flex-1 overflow-y-auto">
-        <nav className="space-y-1">
-          {menuItems.map((item, index) => (
-            item.divider ? (
-              <div key={`divider-${index}`} className="h-px bg-gray-700 my-4" />
-            ) : (
-              <Link
-                key={index}
-                to={item.path}
-                className="flex items-center text-sm gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
-                title={!isOpen ? item.title : ""}
-              >
-                <span>{item.icon}</span>
-                {isOpen && <span>{item.title}</span>}
-              </Link>
-            )
-          ))}
-
-         {/* Tasks Item with Dropdown */}
-          <div className="relative">
-              <button
-                onClick={toggleTasksDropdown}
-                className="w-full flex items-center justify-between text-sm gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
-                title={!isOpen ? "Tasks" : ""}
-              >
-                <div className="flex items-center gap-3">
-                  <span><AiOutlineCheckSquare size={20} /></span>
-                  {isOpen && <span>Tasks</span>}
-                </div>
-                {isOpen && (
-                  <span>
-                    {isTasksOpen ? <HiOutlineChevronUp size={16} /> : <HiOutlineChevronDown size={16} />}
-                  </span>
-                )}
-              </button>
-              
-              {/* Tasks Dropdown Component */}
-              {isOpen && (
-                <Dropdown 
-                  isOpen={isTasksOpen}
-                  items={tasks}
-                  onCreateItem={handleCreateTask}
-                  linkPath="/taskspage"
-                />
-              )}
-            </div>
-
-             {/* Task list */}
-            {isOpen && !isTasksOpen && tasks.length > 0 && (
-              <div className="pl-10 mt-1 space-y-1">
-                {tasks.map((task, index) => (
-                  <Link
+        <div className="p-4 flex-1 overflow-y-auto">
+            <nav className="space-y-1">
+            {menuItems.map((item, index) => (
+                item.divider ? (
+                <div key={`divider-${index}`} className="h-px bg-gray-700 my-4" />
+                ) : (
+                <Link
                     key={index}
-                    to="/taskspage"
-                    className="flex items-center text-sm py-2 text-gray-300 hover:text-gray-100"
-                  >
-                    <span>{task.title}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-        </nav>
-      </div>
+                    to={item.path}
+                    className="flex items-center text-sm gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
+                    title={!isOpen ? item.title : ""}
+                >
+                    <span>{item.icon}</span>
+                    {isOpen && <span>{item.title}</span>}
+                </Link>
+                )
+            ))}
 
-      <div className="p-4 border-t border-gray-700">
-        {isOpen ? (
-          <div className="flex items-center gap-3 px-4 py-2">
-            <div className="w-8 h-8 rounded-full bg-gray-600"></div>
-            <div>
-              <p className="text-sm font-medium">{userData?.username?.split('@')[0] || "Null"}</p>
-              <p className="text-xs text-gray-400">{userData?.username?.split('@')[0] || ""}</p>
+            {/* Tasks Item with Dropdown */}
+            <div className="relative">
+                <button
+                    onClick={toggleTasksDropdown}
+                    className="w-full flex items-center justify-between text-sm gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
+                    title={!isOpen ? "Tasks" : ""}
+                >
+                    <div className="flex items-center gap-3">
+                    <span><AiOutlineCheckSquare size={20} /></span>
+                    {isOpen && <span>Tasks</span>}
+                    </div>
+                    {isOpen && (
+                    <span>
+                        {isTasksOpen ? <HiOutlineChevronUp size={16} /> : <HiOutlineChevronDown size={16} />}
+                    </span>
+                    )}
+                </button>
+                
+                {/* Tasks Dropdown Component */}
+                {isOpen && (
+                    <Dropdown 
+                    isOpen={isTasksOpen}
+                    items={tasks}
+                    onCreateItem={handleCreateTask}
+                    linkPath="/taskspage"
+                    />
+                )}
+                </div>
+
+                {/* Task list */}
+                {isOpen && !isTasksOpen && tasks.length > 0 && (
+                <div className="pl-10 mt-1 space-y-1">
+                    {tasks.map((task, index) => (
+                    <Link
+                        key={index}
+                        to="/taskspage"
+                        className="flex items-center text-sm py-2 text-gray-300 hover:text-gray-100"
+                    >
+                        <span>{task.title}</span>
+                    </Link>
+                    ))}
+                </div>
+                )}
+            </nav>
+        </div>
+
+        <div className="p-4 border-t border-gray-700">
+            {isOpen ? (
+            <div className="flex items-center gap-3 px-4 py-2">
+                <div className="w-8 h-8 rounded-full bg-gray-600"><img src={userData?.profile || "images/ReverionLogo.png"} alt="Profile" /></div>
+                <div>
+                <p className="text-sm font-medium">{userData?.username?.split('@')[0] || "Null"}</p>
+                <p className="text-xs text-gray-400">{userData?.username?.split('@')[0] || ""}</p>
+                </div>
+                <button className="ml-2 w-8 h-8 rounded-full bg-gray-600 hover:bg-gray-500 transition" onClick={handleSignOut} disabled={isSigningOut}>X</button>
             </div>
-          </div>
-        ) : (
-          <div className="flex justify-center">
-            <div className="w-8 h-8 rounded-full bg-gray-600"></div>
-          </div>
-        )}
-      </div>
-    </div>
+            ) : (
+            <div className="flex justify-center">
+                <div className="w-8 h-8 rounded-full bg-gray-600"></div>
+            </div>
+            )}
+        </div>
+        </div>
+
+    </>
   );
 };
 
